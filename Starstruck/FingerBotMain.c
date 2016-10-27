@@ -32,90 +32,92 @@
 
 void pre_auton()
 {
-	bStopTasksBetweenModes = true;
-	bLCDBacklight = true;
-	if( !(nVexRCReceiveState & 0x08)){
-		while(!nLCDButtons){
-			wait1Msec(5);
-			clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0,"Select Program: ");
-			displayLCDNumber(1,0,programSelected(SEGMENTS));
-		}
-		autonSelection = programSelected(8);
-	}else{
-		autonSelection = programSelected(8);
-	}
+        bStopTasksBetweenModes = true;
+        bLCDBacklight = true;
+        if( !(nVexRCReceiveState & 0x08)){
+                while(!nLCDButtons){
+                        wait1Msec(5);
+                        clearLCDLine(0);
+                        clearLCDLine(1);
+                        displayLCDString(0,0,"Select Program: ");
+                        displayLCDNumber(1,0,programSelected(SEGMENTS));
+                }
+                autonSelection = programSelected(8);
+        }else{
+                autonSelection = programSelected(8);
+        }
 
 }
+ompGaming - Today at 9:27 PM
+And caleb, do you want me to just bring your check and wallet into school tomorrow?
 
 task autonomous()
 {
-	//Step One: Rotate with the preload and grab cube
-	//Step Two: Raise and knock off middle stars
-	//Step Three: Drop everything than move straight back
-	//Step Four: Strafe left to center on left wall section
-	//Step Five: Drive forward and knock off stars with claw open
-	startTask(lightMonitor);
-	startTask(fingerMonitor);
-	zeroAllSensors();
-	switch(autonSelection){
-	case 0:
-		autonZero();
-		break;
-	case 1:
-		autonOne();
-		break;
-	case 2:
-		autonTwo();
-		break;
-	case 3:
-		autonThree();
-		break;
-	case 4:
-		autonFour();
-		break;
-	default:
-		clearLCDLine(0);
-		clearLCDLine(1);
-		displayLCDString(0,0,"Invalid");
-		displayLCDString(1,0,"Selection");
-		break;
-	}
+        //Step One: Rotate with the preload and grab cube
+        //Step Two: Raise and knock off middle stars
+        //Step Three: Drop everything than move straight back
+        //Step Four: Strafe left to center on left wall section
+        //Step Five: Drive forward and knock off stars with claw open
+        startTask(lightMonitor);
+        startTask(fingerMonitor);
+        zeroAllSensors();
+        switch(autonSelection){
+                case 0:
+                        autonZero();
+                        break;
+                case 1:
+                        autonOne();
+                        break;
+                case 2:
+                        autonTwo();
+                        break;
+                case 3:
+                        autonThree();
+                        break;
+                case 4:
+                        autonFour();
+                        break;
+                default:
+                        clearLCDLine(0);
+                        clearLCDLine(1);
+                        displayLCDString(0,0,"Invalid");
+                        displayLCDString(1,0,"Selection");
+                        break;
+        }
 }
 
 task usercontrol()
 {
-	startTask(fingerMonitor);
-	startTask(lightMonitor);
-	while (true)
-	{
-		displayLCDString(0,0,"Running Program: ");
-			displayLCDNumber(1,0,programSelected(SEGMENTS));
-		if(vexRT[Btn6U] == 1){
-			raiseLift(OFF);
-		}
-		if(vexRT[Btn6D] == 1){
-			lowerLift(OFF);
-		}
-		if(vexRT[Btn6U] == OFF && vexRT[Btn6D] == OFF){
-		stopLift();
-	}
+        startTask(fingerMonitor);
+        startTask(lightMonitor);
+        while (true)
+        {
+                displayLCDString(0,0,"Running Program: ");
+                displayLCDNumber(1,0,programSelected(SEGMENTS));
+                if(vexRT[Btn6U] == 1){
+                        raiseLift(OFF);
+                }
+                if(vexRT[Btn6D] == 1){
+                        lowerLift(OFF);
+                }
+                if(vexRT[Btn6U] == OFF && vexRT[Btn6D] == OFF){
+                        stopLift();
+                }
 
-	if(vexRT[Btn5D] == 1){
-		closeClaw(OFF);
-		}else if(vexRT[Btn5U] == 1){
-		openClaw();
-	}
+                if(vexRT[Btn5D] == 1){
+                        closeClaw(OFF);
+                }else if(vexRT[Btn5U] == 1){
+                        openClaw();
+                }
 
-	if(vexRT[Btn7R] == 1){
-		strafeRight(OFF);
-	}
-	if(vexRT[Btn7L] == 1){
-		strafeLeft(OFF);
-	}
-	if(vexRT[Btn7R] == OFF && vexRT[Btn7L] == OFF){
-		analogDrive();
-	}
-}
+                if(vexRT[Btn7R] == 1){
+                        strafeRight(OFF);
+                }
+                if(vexRT[Btn7L] == 1){
+                        strafeLeft(OFF);
+                }
+                if(vexRT[Btn7R] == OFF && vexRT[Btn7L] == OFF){
+                        analogDrive();
+                }
+        }
 }
