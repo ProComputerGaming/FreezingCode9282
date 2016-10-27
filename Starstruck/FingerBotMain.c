@@ -1,4 +1,6 @@
-#pragma config(Sensor, in1,    leftFrontLight, sensorLineFollower)
+#pragma config(UART_Usage, UART1, uartVEXLCD, baudRate19200, IOPins, None, None)
+#pragma config(UART_Usage, UART2, uartNotUsed, baudRate4800, IOPins, None, None)
+#pragma config(Sensor, in1,    leftFrontLight, sensorNone)
 #pragma config(Sensor, in2,    leftMidLight,   sensorLineFollower)
 #pragma config(Sensor, in3,    leftBackLight,  sensorLineFollower)
 #pragma config(Sensor, in4,    rightFrontLight, sensorLineFollower)
@@ -9,8 +11,8 @@
 #pragma config(Sensor, dgtl1,  liftQuad,       sensorQuadEncoder)
 #pragma config(Sensor, dgtl3,  leftFingerSwitch, sensorDigitalIn)
 #pragma config(Sensor, dgtl4,  rightFingerSwitch, sensorDigitalIn)
-#pragma config(Sensor, dgtl5,  leftQuad,       sensorQuadEncoder)
-#pragma config(Sensor, dgtl7,  rightQuad,      sensorQuadEncoder)
+#pragma config(Sensor, dgtl5,  rightQuad,      sensorQuadEncoder)
+#pragma config(Sensor, dgtl7,  leftQuad,       sensorQuadEncoder)
 #pragma config(Motor,  port2,           frontRight,    tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port3,           backRight,     tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port4,           frontLeft,     tmotorVex393_MC29, openLoop)
@@ -30,83 +32,90 @@
 
 void pre_auton()
 {
-        bStopTasksBetweenModes = true;
+	bStopTasksBetweenModes = true;
+	bLCDBacklight = true;
+	if( !(nVexRCReceiveState & 0x08)){
+		while(!nLCDButtons){
+			wait1Msec(5);
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0,"Select Program: ");
+			displayLCDNumber(1,0,programSelected(SEGMENTS));
+		}
+		autonSelection = programSelected(8);
+	}else{
+		autonSelection = programSelected(8);
+	}
 
-        while(!nLCDButtons){
-                wait1Msec(5);
-                clearLCDLine(0);
-                clearLCDLine(1);
-                displayLCDString(0,0,"Selecting Program: ");
-                displayLCDNumber(0,0,programSelected(8));
-        }
-        autonSelection = programSelected(8);
 }
 
 task autonomous()
 {
-        //Step One: Rotate with the preload and grab cube
-        //Step Two: Raise and knock off middle stars
-        //Step Three: Drop everything than move straight back
-        //Step Four: Strafe left to center on left wall section
-        //Step Five: Drive forward and knock off stars with claw open
-        startTask(lightMonitor);
-        startTask(fingerMonitor);
-
-        switch(autonSelection){
-                case 0:
-                        autonZero();
-                        break;
-                case 1:
-                        autonOne();
-                        break;
-                case 2:
-                        autonTwo();
-                        break;
-                case 3:
-                        autonThree();
-                        break;
-                case 4:
-                        autonFour();
-                        break;
-                default:
-                        clearLCDLine(0);
-                        clearLCDLine(1);
-                        displayLCDString(0,0,"Invalid");
-                        displayLCDString(1,0,"Selection");
-                        break;
-        }
+	//Step One: Rotate with the preload and grab cube
+	//Step Two: Raise and knock off middle stars
+	//Step Three: Drop everything than move straight back
+	//Step Four: Strafe left to center on left wall section
+	//Step Five: Drive forward and knock off stars with claw open
+	startTask(lightMonitor);
+	startTask(fingerMonitor);
+	zeroAllSensors();
+	switch(autonSelection){
+	case 0:
+		autonZero();
+		break;
+	case 1:
+		autonOne();
+		break;
+	case 2:
+		autonTwo();
+		break;
+	case 3:
+		autonThree();
+		break;
+	case 4:
+		autonFour();
+		break;
+	default:
+		clearLCDLine(0);
+		clearLCDLine(1);
+		displayLCDString(0,0,"Invalid");
+		displayLCDString(1,0,"Selection");
+		break;
+	}
 }
 
 task usercontrol()
 {
-        startTask(fingerMonitor);
-        startTask(lightMonitor);
-        while (true)
-        {
-                if(vexRT[Btn6U] == 1){
-                        raiseLift(0);
-                }
-                if(vexRT[Btn6D] == 1){
-                        lowerLift(0);
-                }
-                if(vexRT[Btn6U]==0 && vexRT[Btn6D]==0){
-                        stopLift();
-                }
+	startTask(fingerMonitor);
+	startTask(lightMonitor);
+	while (true)
+	{
+		displayLCDString(0,0,"Running Program: ");
+			displayLCDNumber(1,0,programSelected(SEGMENTS));
+		if(vexRT[Btn6U] == 1){
+			raiseLift(OFF);
+		}
+		if(vexRT[Btn6D] == 1){
+			lowerLift(OFF);
+		}
+		if(vexRT[Btn6U] == OFF && vexRT[Btn6D] == OFF){
+		stopLift();
+	}
 
-                if(vexRT[Btn5D] == 1){
-                        closeClaw(0);
-                }else if(vexRT[Btn5U] == 1){
-                        openClaw();
-                }
+	if(vexRT[Btn5D] == 1){
+		closeClaw(OFF);
+		}else if(vexRT[Btn5U] == 1){
+		openClaw();
+	}
 
-                if(vexRT[Btn7R] == 1){
-                        strafeRight(0);
-                }
-                if(vexRT[Btn7L] == 1){
-                        strafeLeft(0);
-                }
-                if(vexRT[Btn7R] == 0 && vexRT[Btn7L] == 0){
-                        analogDrive();
-                }
-        }
+	if(vexRT[Btn7R] == 1){
+		strafeRight(OFF);
+	}
+	if(vexRT[Btn7L] == 1){
+		strafeLeft(OFF);
+	}
+	if(vexRT[Btn7R] == OFF && vexRT[Btn7L] == OFF){
+		analogDrive();
+	}
+}
 }
