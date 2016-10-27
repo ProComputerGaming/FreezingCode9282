@@ -48,8 +48,6 @@ void pre_auton()
         }
 
 }
-ompGaming - Today at 9:27 PM
-And caleb, do you want me to just bring your check and wallet into school tomorrow?
 
 task autonomous()
 {
