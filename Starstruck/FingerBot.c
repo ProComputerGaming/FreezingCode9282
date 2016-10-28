@@ -3,12 +3,12 @@ const int OFF = 0;
 
 int autonSelection = 0;
 const int SEGMENTS = 8;
+
 bool downPressure = false;
 bool runFinger = false;
 bool fingerNeedsToOpen = false;
 
 int lightArray[6];
-
 
 task fingerMonitor();
 task lightMonitor();
@@ -31,20 +31,6 @@ void stopAllMotors();
 void zeroDriveSensors();
 int programSelected(int segments);
 int clamp(int var, int min, int max);
-
-//typedef enum
-//{
-//	vrNoXmiters           = 0,        // No transmitters connected
-//	vrXmit1               = 0x01,     //                          1 == Transmitter 1 connected
-//	vrXmit2               = 0x02,     //                          1 == Transmitter 2 connected
-//	vrBit2                = 0x04,     // Unused
-//	vrCompetitionSwitch   = 0x08,     // 0 == No Comp Switch      1 == Competition Switch attached.
-//	vrResetSlave	  = 0x10,     // Unused
-//	vrGameController	  = 0x20,     // 0 == Legacy75MHz,        1 == Game Controller
-//	vrAutonomousMode      = 0x40,     // 0 == Driver Control,     1 == Autonomous Mode
-//	vrDisabled      	  = 0x80,     // 0 == Enabled             1 == Disabled.
-//} TVexReceiverState;
-
 
 task fingerMonitor(){
         fingerNeedsToOpen = (SensorValue[leftFingerSwitch] == 1 || SensorValue[rightFingerSwitch] == 1);

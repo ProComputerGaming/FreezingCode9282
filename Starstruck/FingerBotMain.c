@@ -24,7 +24,9 @@
 
 #pragma platform(VEX2)
 
-#pragma competitionControl(Competition)
+#pragma competitionControl(Competition).
+
+#define LIGHT_SENSE_EN 0
 
 #include "Vex_Competition_Includes.c"
 #include "FingerBot.c"
@@ -51,13 +53,12 @@ void pre_auton()
 
 task autonomous()
 {
-        //Step One: Rotate with the preload and grab cube
-        //Step Two: Raise and knock off middle stars
-        //Step Three: Drop everything than move straight back
-        //Step Four: Strafe left to center on left wall section
-        //Step Five: Drive forward and knock off stars with claw open
-        startTask(lightMonitor);
         startTask(fingerMonitor);
+
+	#if(LIGHT_SENSE_EN)
+		startTask(lightMonitor);
+	#endif
+
         zeroAllSensors();
         switch(autonSelection){
                 case 0:
@@ -87,7 +88,11 @@ task autonomous()
 task usercontrol()
 {
         startTask(fingerMonitor);
-        startTask(lightMonitor);
+
+	#if(LIGHT_SENSE_EN)
+		startTask(lightMonitor);
+	#endif
+
         while (true)
         {
                 displayLCDString(0,0,"Running Program: ");
