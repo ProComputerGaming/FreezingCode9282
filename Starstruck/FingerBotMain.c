@@ -34,93 +34,123 @@
 
 void pre_auton()
 {
-        bStopTasksBetweenModes = true;
-        bLCDBacklight = true;
-        if( !(nVexRCReceiveState & 0x08)){
-                while(!nLCDButtons){
-                        wait1Msec(5);
-                        clearLCDLine(0);
-                        clearLCDLine(1);
-                        displayLCDString(0,0,"Select Program: ");
-                        displayLCDNumber(1,0,programSelected(SEGMENTS));
-                }
-                autonSelection = programSelected(8);
-        }else{
-                autonSelection = programSelected(8);
-        }
+	bStopTasksBetweenModes = true;
+	bLCDBacklight = true;
+	if( !(nVexRCReceiveState & 0x08)){
+		while(!nLCDButtons){
+			wait1Msec(5);
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0,"Select Program: ");
+			displayLCDNumber(1,0,programSelected(SEGMENTS));
+		}
+		autonSelection = programSelected(8);
+		}else{
+		autonSelection = programSelected(8);
+	}
 
 }
 
 task autonomous()
 {
-        startTask(fingerMonitor);
+	startTask(fingerMonitor);
 
 	#if(LIGHT_SENSE_EN)
 		startTask(lightMonitor);
 	#endif
 
-        zeroAllSensors();
-        switch(autonSelection){
-                case 0:
-                        autonZero();
-                        break;
-                case 1:
-                        autonOne();
-                        break;
-                case 2:
-                        autonTwo();
-                        break;
-                case 3:
-                        autonThree();
-                        break;
-                case 4:
-                        autonFour();
-                        break;
-                default:
-                        clearLCDLine(0);
-                        clearLCDLine(1);
-                        displayLCDString(0,0,"Invalid");
-                        displayLCDString(1,0,"Selection");
-                        break;
-        }
+	zeroAllSensors();
+	switch(autonSelection){
+	case 0:
+		autonZero();
+		break;
+	case 1:
+		autonOne();
+		break;
+	case 2:
+		autonTwo();
+		break;
+	case 3:
+		autonThree();
+		break;
+	case 4:
+		autonFour();
+		break;
+	case 5:
+		autonFive();
+		break;
+	case 6:
+		autonSix();
+		break;
+	case 7:
+		autonSeven();
+		break;
+	case 8:
+		autonEight();
+		break;
+	case 9:
+		autonNine();
+		break;
+	case 10:
+		autonTen();
+		break;
+	case 11:
+		autonEleven();
+		break;
+	case 12:
+		autonTwelve();
+		break;
+	case 13:
+		autonThirteen();
+		break;
+	case 14:
+		autonFourteen();
+		break;
+	default:
+		clearLCDLine(0);
+		clearLCDLine(1);
+		displayLCDString(0,0,"Invalid");
+		displayLCDString(1,0,"Selection");
+		break;
+	}
 }
 
 task usercontrol()
 {
-        startTask(fingerMonitor);
+	startTask(fingerMonitor);
 
 	#if(LIGHT_SENSE_EN)
 		startTask(lightMonitor);
 	#endif
 
-        while (true)
-        {
-                displayLCDString(0,0,"Running Program: ");
-                displayLCDNumber(1,0,programSelected(SEGMENTS));
-                if(vexRT[Btn6U] == 1){
-                        raiseLift(OFF);
-                }
-                if(vexRT[Btn6D] == 1){
-                        lowerLift(OFF);
-                }
-                if(vexRT[Btn6U] == OFF && vexRT[Btn6D] == OFF){
-                        stopLift();
-                }
+	while (true)
+	{
+		displayLCDString(0,0,"Running Program: ");
+		displayLCDNumber(1,0,programSelected(SEGMENTS));
+		if(vexRT[Btn6U] == 1){
+			raiseLift(OFF);
+		}
+		if(vexRT[Btn6D] == 1){
+			lowerLift(OFF);
+		}
+		if(vexRT[Btn6U] == OFF && vexRT[Btn6D] == OFF){
+			stopLift();
+		}
 
-                if(vexRT[Btn5D] == 1){
-                        closeClaw(OFF);
-                }else if(vexRT[Btn5U] == 1){
-                        openClaw();
-                }
+		if(vexRT[Btn5D] == 1){
+			closeClaw(OFF);
+			}else if(vexRT[Btn5U] == 1){
+			openClaw();
+		}
 
-                if(vexRT[Btn7R] == 1){
-                        strafeRight(OFF);
-                }
-                if(vexRT[Btn7L] == 1){
-                        strafeLeft(OFF);
-                }
-                if(vexRT[Btn7R] == OFF && vexRT[Btn7L] == OFF){
-                        analogDrive();
-                }
-        }
+		if(vexRT[Btn7R] == 1){
+			strafeRight(OFF);
+		}
+		if(vexRT[Btn7L] == 1){
+			strafeLeft(OFF);
+		}
+		if(vexRT[Btn7R] == OFF && vexRT[Btn7L] == OFF){
+			analogDrive();
+		}
+	}
 }

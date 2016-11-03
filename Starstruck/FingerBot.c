@@ -3,15 +3,21 @@ const int OFF = 0;
 
 int autonSelection = 0;
 const int SEGMENTS = 8;
+int targetTicks = 0;
 
 bool downPressure = false;
 bool runFinger = false;
 bool fingerNeedsToOpen = false;
+bool runWheels = false;
+bool wheelsNeedToMove = false;
+bool rightSideNeedsToMove = false;
+bool leftSideNeedsToMove = false;
 
 int lightArray[6];
 
 task fingerMonitor();
 task lightMonitor();
+task wheelMonitor();
 void analogDrive();
 void driveForward(int ticks);
 void driveBackward(int ticks);
@@ -62,6 +68,15 @@ task lightMonitor(){
                 lightArray[5] = SensorValue(rightBackLight);
                 wait1Msec(2);
         }
+}
+
+task wheelMonitor(){
+	while(true){
+			while(runFinger && wheelsNeedToMove){
+				if(SensorValue(leftQuad) < targetTicks) leftSideNeedsToMove = true;
+		if(SensorValue(rightQuad) < targetTicks) rightSideNeedsToMove = true;
+			}
+		}
 }
 
 void analogDrive(){
