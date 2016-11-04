@@ -1,19 +1,38 @@
-#include "FingerBot.h"
-
 const int FULL_SPEED = 127;
 const int OFF = 0;
 
 int autonSelection = 0;
 const int SEGMENTS = 8;
-int autonTargetTicks = 0;
-enum Direction dir = FORWARD;
+int targetTicks = 0;
 
 bool downPressure = false;
 bool runFinger = false;
 bool fingerNeedsToOpen = false;
-bool runWheels = false;
-bool leftDone = false;
-bool rightDone = false;
+
+int lightArray[6];
+
+task fingerMonitor();
+task lightMonitor();
+task wheelMonitor();
+void analogDrive();
+void driveForward(int ticks);
+void driveBackward(int ticks);
+void turnRight(int ticks);
+void turnLeft(int ticks);
+void strafeRight(int millis);
+void strafeLeft(int millis);
+void raiseLift(int targetTicks);
+void lowerLift(int targetTicks);
+void raiseLift(int targetTicks, int speed);
+void lowerLift(int targetTicks, int speed);
+void closeClaw(int millis);
+void openClaw();
+void stopLift();
+void stopDrive();
+void stopAllMotors();
+void zeroDriveSensors();
+int programSelected(int segments);
+int clamp(int var, int min, int max);
 
 task fingerMonitor(){
         fingerNeedsToOpen = (SensorValue[leftFingerSwitch] == 1 || SensorValue[rightFingerSwitch] == 1);
@@ -47,40 +66,6 @@ task lightMonitor(){
         }
 }
 
-task wheelMonitor(){
-        while(true){
-                while(runWheels){
-                        if(SensorValue(leftQuad) < autonTargetTicks){
-                                switch(dir){
-                                        case FORWARD: dLeft(false); break;
-                                        case BACKWARD: dLeft(true); break;
-                                        case LEFT: dLeft(true); break;
-                                        case RIGHT: dLeft(false); break;
-                                }
-                        }else{
-                                leftDone = true;
-                                stopLeft();
-                        }
-
-                        if(SensorValue(rightQuad) < autonTargetTicks){
-                                switch(dir){
-                                        case FORWARD: dRight(false); break;
-                                        case BACKWARD: dRight(true); break;
-                                        case LEFT: dRight(false); break;
-                                        case RIGHT: dRight(true); break;
-                                }
-                        }else{
-                                rightDone = true;
-                                stopRight();
-                        }
-
-                        if(leftDone && rightDone)
-                                runWheels = false;
-                }
-
-        }
-}
-
 void analogDrive(){
         motor[backRight] = vexRT[Ch2];
         motor[frontRight] = vexRT[Ch2];
@@ -88,45 +73,31 @@ void analogDrive(){
         motor[frontLeft] = vexRT[Ch3];
 }
 
-void setAutonMove(Direction d, int targetTicks){
-        autonTargetTicks = targetTicks;
-        dir = d;
-        leftDone = false;
-        rightDone = false;
-        runWheels = true;
-
-}
-
-void dLeft(bool backwards){
-        motor[backLeft] = backwards ?  -FULL_SPEED : FULL_SPEED;
-        motor[frontLeft] = backwards ? -FULL_SPEED : FULL_SPEED;
-}
-
-void dRight(bool backwards){
-        motor[backRight] = backwards ?  -FULL_SPEED : FULL_SPEED;
-        motor[frontRight] = backwards ? -FULL_SPEED : FULL_SPEED;
-}
-
-
 void driveForward (int ticks){
         zeroDriveSensors();
         if(ticks != 0){
                 while(abs(SensorValue(leftQuad)) < ticks || abs(SensorValue(rightQuad)) < ticks){
                         if(abs(SensorValue(leftQuad)) < ticks){
-                                dLeft(false);
+                                motor[backLeft] = 127;
+                                motor[frontLeft] = 127;
                         }else{
-                                stopLeft();
+                                motor[backLeft] = 0;
+                                motor[frontLeft] = 0;
                         }
                         if(abs(SensorValue(rightQuad)) < ticks){
-                                dRight(false);
+                                motor[backRight] = 127;
+                                motor[frontRight] = 127;
                         }else{
-                                stopRight();
+                                motor[backRight] = 0;
+                                motor[frontRight] = 0;
                         }
                 }
                 stopDrive();
         }else{
-                dLeft(false);
-                dRight(false);
+                motor[backRight] = 127;
+                motor[frontRight] = 127;
+                motor[backLeft] = 127;
+                motor[frontLeft] = 127;
         }
 }
 
@@ -135,20 +106,26 @@ void driveBackward (int ticks){
         if(ticks != 0){
                 while(abs(SensorValue(leftQuad)) < ticks || abs(SensorValue(rightQuad)) < ticks){
                         if(abs(SensorValue(leftQuad)) < ticks){
-                                dLeft(true);
+                                motor[backLeft] = -127;
+                                motor[frontLeft] = -127;
                         }else{
-                                stopLeft();
+                                motor[backLeft] = 0;
+                                motor[frontLeft] = 0;
                         }
                         if(abs(SensorValue(rightQuad)) < ticks){
-                                dRight(true);
+                                motor[backRight] = -127;
+                                motor[frontRight] = -127;
                         }else{
-                                stopRight();
+                                motor[backRight] = 0;
+                                motor[frontRight] = 0;
                         }
                 }
                 stopDrive();
         }else{
-                dRight(true);
-                dLeft(true);
+                motor[backRight] = -127;
+                motor[frontRight] = -127;
+                motor[backLeft] = -127;
+                motor[frontLeft] = -127;
         }
 }
 
@@ -157,20 +134,26 @@ void turnRight(int ticks){
         if(ticks != 0){
                 while(abs(SensorValue(leftQuad)) < ticks || abs(SensorValue(rightQuad)) < ticks){
                         if(abs(SensorValue(leftQuad)) < ticks){
-                                dLeft(false);
+                                motor[backLeft] = 127;
+                                motor[frontLeft] = 127;
                         }else{
-                                stopLeft();
+                                motor[backLeft] = 0;
+                                motor[frontLeft] = 0;
                         }
                         if(abs(SensorValue(rightQuad)) < ticks){
-                                dRight(true);
+                                motor[backRight] = -127;
+                                motor[frontRight] = -127;
                         }else{
-                                stopRight();
+                                motor[backRight] = 0;
+                                motor[frontRight] = 0;
                         }
                 }
                 stopDrive();
         }else{
-                dRight(true);
-                dLeft(false);
+                motor[backRight] = -127;
+                motor[frontRight] = -127;
+                motor[backLeft] = 127;
+                motor[frontLeft] = 127;
         }
 }
 
@@ -179,20 +162,26 @@ void turnLeft(int ticks){
         if(ticks != 0){
                 while(abs(SensorValue(leftQuad)) < ticks || abs(SensorValue(rightQuad)) < ticks){
                         if(abs(SensorValue(leftQuad)) < ticks){
-                                dLeft(true);
+                                motor[backLeft] = -127;
+                                motor[frontLeft] = -127;
                         }else{
-                                stopLeft();
+                                motor[backLeft] = 0;
+                                motor[frontLeft] = 0;
                         }
                         if(abs(SensorValue(rightQuad)) < ticks){
-                                dRight(false);
+                                motor[backRight] = 127;
+                                motor[frontRight] = 127;
                         }else{
-                                stopRight();
+                                motor[backRight] = 0;
+                                motor[frontRight] = 0;
                         }
                 }
                 stopDrive();
         }else{
-                dLeft(true);
-                dRight(false);
+                motor[backRight] = 127;
+                motor[frontRight] = 127;
+                motor[backLeft] = -127;
+                motor[frontLeft] = -127;
         }
 }
 
@@ -286,19 +275,11 @@ void openClaw(){
         runFinger = true;
 }
 
-void stopLeft(){
-        motor[backLeft] = 0;
-        motor[frontLeft] = 0;
-}
-
-void stopRight(){
+void stopDrive(){
         motor[backRight] = 0;
         motor[frontRight] = 0;
-}
-
-void stopDrive(){
-        stopLeft();
-        stopRight();
+        motor[backLeft] = 0;
+        motor[frontLeft] = 0;
 }
 
 void stopLift(){
@@ -307,8 +288,12 @@ void stopLift(){
 }
 
 void stopAllMotors(){
-        stopDrive();
-        stopLift();
+        motor[backRight] = 0;
+        motor[frontRight] = 0;
+        motor[backLeft] = 0;
+        motor[frontLeft] = 0;
+        motor[leftLiftY] = 0;
+        motor[rightLiftY] = 0;
         motor[fingerY] = 0;
 }
 
