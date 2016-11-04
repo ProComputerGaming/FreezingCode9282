@@ -50,32 +50,32 @@ task lightMonitor(){
 task wheelMonitor(){
         while(true){
                 while(runWheels){
-                    if(SensorValue(leftQuad) < autonTargetTicks){
-          							switch(dir){
-          								case FORWARD: dLeft(false); break;
-          								case BACKWARD: dLeft(true); break;
-          								case LEFT: dLeft(true); break;
-          								case RIGHT: dLeft(false); break;
-          							}
-                    }else{
-                    	leftDone = true;
-                    	stopLeft();
-                  	}
+                        if(SensorValue(leftQuad) < autonTargetTicks){
+                                switch(dir){
+                                        case FORWARD: dLeft(false); break;
+                                        case BACKWARD: dLeft(true); break;
+                                        case LEFT: dLeft(true); break;
+                                        case RIGHT: dLeft(false); break;
+                                }
+                        }else{
+                                leftDone = true;
+                                stopLeft();
+                        }
 
-                    if(SensorValue(rightQuad) < autonTargetTicks){
-												switch(dir){
-          								case FORWARD: dRight(false); break;
-          								case BACKWARD: dRight(true); break;
-          								case LEFT: dRight(false); break;
-          								case RIGHT: dRight(true); break;
-          							}
-                    }else{
-                    	rightDone = true;
-                    	stopRight();
-                  	}
+                        if(SensorValue(rightQuad) < autonTargetTicks){
+                                switch(dir){
+                                        case FORWARD: dRight(false); break;
+                                        case BACKWARD: dRight(true); break;
+                                        case LEFT: dRight(false); break;
+                                        case RIGHT: dRight(true); break;
+                                }
+                        }else{
+                                rightDone = true;
+                                stopRight();
+                        }
 
-                  	if(leftDone && rightDone)
-                  		runWheels = false;
+                        if(leftDone && rightDone)
+                                runWheels = false;
                 }
 
         }
@@ -89,22 +89,22 @@ void analogDrive(){
 }
 
 void setAutonMove(Direction d, int targetTicks){
-	autonTargetTicks = targetTicks;
-	dir = d;
-	leftDone = false;
-	rightDone = false;
-	runWheels = true;
+        autonTargetTicks = targetTicks;
+        dir = d;
+        leftDone = false;
+        rightDone = false;
+        runWheels = true;
 
 }
 
 void dLeft(bool backwards){
-   motor[backLeft] = backwards ?  -FULL_SPEED : FULL_SPEED;
-   motor[frontLeft] = backwards ? -FULL_SPEED : FULL_SPEED;
+        motor[backLeft] = backwards ?  -FULL_SPEED : FULL_SPEED;
+        motor[frontLeft] = backwards ? -FULL_SPEED : FULL_SPEED;
 }
 
 void dRight(bool backwards){
-   motor[backRight] = backwards ?  -FULL_SPEED : FULL_SPEED;
-   motor[frontRight] = backwards ? -FULL_SPEED : FULL_SPEED;
+        motor[backRight] = backwards ?  -FULL_SPEED : FULL_SPEED;
+        motor[frontRight] = backwards ? -FULL_SPEED : FULL_SPEED;
 }
 
 
@@ -147,8 +147,8 @@ void driveBackward (int ticks){
                 }
                 stopDrive();
         }else{
-            dRight(true);
-            dLeft(true);
+                dRight(true);
+                dLeft(true);
         }
 }
 
@@ -287,18 +287,18 @@ void openClaw(){
 }
 
 void stopLeft(){
-    motor[backLeft] = 0;
-    motor[frontLeft] = 0;
+        motor[backLeft] = 0;
+        motor[frontLeft] = 0;
 }
 
 void stopRight(){
-    motor[backRight] = 0;
-    motor[frontRight] = 0;
+        motor[backRight] = 0;
+        motor[frontRight] = 0;
 }
 
 void stopDrive(){
-    stopLeft();
-    stopRight();
+        stopLeft();
+        stopRight();
 }
 
 void stopLift(){
@@ -307,9 +307,9 @@ void stopLift(){
 }
 
 void stopAllMotors(){
-    stopDrive();
-    stopLift();
-    motor[fingerY] = 0;
+        stopDrive();
+        stopLift();
+        motor[fingerY] = 0;
 }
 
 void zeroDriveSensors(){
