@@ -3,7 +3,6 @@ const int OFF = 0;
 
 int autonSelection = 0;
 const int SEGMENTS = 8;
-int targetTicks = 0;
 
 bool downPressure = false;
 bool runFinger = false;
@@ -13,7 +12,6 @@ int lightArray[6];
 
 task fingerMonitor();
 task lightMonitor();
-task wheelMonitor();
 void analogDrive();
 void driveForward(int ticks);
 void driveBackward(int ticks);
