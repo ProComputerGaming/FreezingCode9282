@@ -13,10 +13,10 @@
 #pragma config(Sensor, dgtl4,  rightFingerSwitch, sensorDigitalIn)
 #pragma config(Sensor, dgtl5,  rightQuad,      sensorQuadEncoder)
 #pragma config(Sensor, dgtl7,  leftQuad,       sensorQuadEncoder)
-#pragma config(Motor,  port2,           frontRight,    tmotorVex393_MC29, openLoop, reversed)
-#pragma config(Motor,  port3,           backRight,     tmotorVex393_MC29, openLoop, reversed)
-#pragma config(Motor,  port4,           frontLeft,     tmotorVex393_MC29, openLoop)
-#pragma config(Motor,  port5,           backLeft,      tmotorVex393_MC29, openLoop)
+#pragma config(Motor,  port2,           frontRight,    tmotorVex393HighSpeed_MC29, openLoop, reversed)
+#pragma config(Motor,  port3,           backRight,     tmotorVex393HighSpeed_MC29, openLoop, reversed)
+#pragma config(Motor,  port4,           frontLeft,     tmotorVex393HighSpeed_MC29, openLoop)
+#pragma config(Motor,  port5,           backLeft,      tmotorVex393HighSpeed_MC29, openLoop)
 #pragma config(Motor,  port6,           fingerY,       tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port7,           leftLiftY,     tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port8,           rightLiftY,    tmotorVex393_MC29, openLoop)
@@ -24,13 +24,13 @@
 
 #pragma platform(VEX2)
 
-#pragma competitionControl(Competition).
+#pragma competitionControl(Competition)
 
 #define LIGHT_SENSE_EN 0
 
 #include "Vex_Competition_Includes.c"
-#include "FingerBot.c"
-#include "autonomous.c"
+#include "FingerBot.h"
+#include "autonomous.h"
 
 void pre_auton()
 {
@@ -48,12 +48,14 @@ void pre_auton()
 		}else{
 		autonSelection = programSelected(8);
 	}
-
 }
 
 task autonomous()
 {
+	inAutonomous = true;
 	startTask(fingerMonitor);
+	startTask(wheelMonitor);
+	startTask(liftMonitor);
 
 	#if(LIGHT_SENSE_EN)
 		startTask(lightMonitor);
@@ -117,6 +119,9 @@ task autonomous()
 
 task usercontrol()
 {
+	inAutonomous = false;
+	stopTask(wheelMonitor);
+	stopTask(liftMonitor);
 	startTask(fingerMonitor);
 
 	#if(LIGHT_SENSE_EN)
@@ -128,10 +133,10 @@ task usercontrol()
 		displayLCDString(0,0,"Running Program: ");
 		displayLCDNumber(1,0,programSelected(SEGMENTS));
 		if(vexRT[Btn6U] == 1){
-			raiseLift(OFF);
+			dLift(false);
 		}
 		if(vexRT[Btn6D] == 1){
-			lowerLift(OFF);
+			dLift(true);
 		}
 		if(vexRT[Btn6U] == OFF && vexRT[Btn6D] == OFF){
 			stopLift();
