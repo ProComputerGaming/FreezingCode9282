@@ -1,28 +1,37 @@
 void autonZero(){
 				//NEW SYNCHRONOUS CODE
-        setSyncMove(FORWARD, 200);
+        setSyncMove(FORWARD, 350);
         waitForTasks();
         openClaw();
         waitForTasks();
-        setSyncMove(FORWARD, 500);
+
+        DRIVEBASE_POWER = 63;
+        setSyncMove(LEFT, 250);
+        waitForTasks();
+        DRIVEBASE_POWER = 127;
+        setSyncMove(FORWARD, 475);
         waitForTasks();
         wait1Msec(200);
         closeClaw(750);
         setSyncLift(650);
         waitForTasks();
+        DRIVEBASE_POWER = 63;
         setSyncMove(RIGHT, 250);
         waitForTasks();
+        DRIVEBASE_POWER = 127;
         setSyncMove(FORWARD, 900);
         waitForTasks();
         openClaw();
         waitForTasks();
         setSyncMove(BACKWARD, 500);
         waitForTasks();
-        setSyncMove(LEFT, 150);
+        DRIVEBASE_POWER = 63;
+        setSyncMove(LEFT, 250);
         waitForTasks();
-        setSyncMove(LEFT, 800);
+        setSyncMove(LEFT, 250);
         setSyncLift(25);
         waitForTasks();
+        DRIVEBASE_POWER = 127;
         setSyncMove(FORWARD, 500);
         waitForTasks();
         closeClaw(800);
@@ -30,8 +39,11 @@ void autonZero(){
         setSyncMove(BACKWARD, 200);
         waitForTasks();
         setSyncLift(600);
-        setSyncMove(RIGHT, 965);
+        DRIVEBASE_POWER = 63;
+        setSyncMove(RIGHT, 500);
         waitForTasks();
+        DRIVEBASE_POWER = 127;
+        setSyncLift(650);
         setSyncMove(FORWARD, 750);
         waitForTasks();
         openClaw();

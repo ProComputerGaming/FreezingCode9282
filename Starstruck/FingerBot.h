@@ -41,7 +41,9 @@ enum WheelDirection{
         RIGHT,
 };
 
-const int FULL_SPEED = 127;
+int DRIVEBASE_POWER = 127;
+int CLAW_POWER = 127;
+int LIFT_POWER = 127;
 const int OFF = 0;
 
 int autonSelection = 0;
@@ -201,13 +203,13 @@ void setSyncMove(WheelDirection d, int targetTicks){
 }
 
 void dLeft(bool backwards){
-        motor[backLeft] = backwards ?  -FULL_SPEED : FULL_SPEED;
-        motor[frontLeft] = backwards ? -FULL_SPEED : FULL_SPEED;
+        motor[backLeft] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motor[frontLeft] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
 }
 
 void dRight(bool backwards){
-        motor[backRight] = backwards ?  -FULL_SPEED : FULL_SPEED;
-        motor[frontRight] = backwards ? -FULL_SPEED : FULL_SPEED;
+        motor[backRight] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motor[frontRight] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
 }
 
 void setSyncLift(int targetTicks){
@@ -216,8 +218,8 @@ void setSyncLift(int targetTicks){
 }
 
 void dLift(bool down){
-        motor[leftLiftY] = down ? -FULL_SPEED : FULL_SPEED;
-        motor[rightLiftY] = down ? -FULL_SPEED : FULL_SPEED;
+        motor[leftLiftY] = down ? -LIFT_POWER : LIFT_POWER;
+        motor[rightLiftY] = down ? -LIFT_POWER : LIFT_POWER;
 }
 
 void strafeLeft(int millis){
@@ -260,17 +262,17 @@ void closeClaw(int millis){
         if(millis != 0){
                 clearTimer(T1);
                 while(time1[T1] < millis){
-                        motor[fingerY] = 127;
+                        motor[fingerY] = CLAW_POWER;
                 }
                 motor[fingerY] = 0;
         }else{
-                motor[fingerY] = 127;
+                motor[fingerY] = CLAW_POWER;
         }
         downPressure = true;
 }
 
 void openClaw(){
-        motor[fingerY] = -127;
+        motor[fingerY] = -CLAW_POWER;
         downPressure = false;
         fingerNeedsToOpen = true;
         runFinger = true;
