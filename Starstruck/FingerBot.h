@@ -1,15 +1,17 @@
-
+#ifndef FINGERBOT_H
+#define FINGERBOT_H
 enum WheelDirection{
         FORWARD,
         BACKWARD,
         LEFT,
         RIGHT,
 };
-
-const int QUARTER = 250;
-const int HALF = QUARTER * 2;
-const int THREE_QUARTER = QUARTER * 3;
-const int FULL = QUARTER * 4;
+float WHEEL_CIR=PI * 4;
+float TOLERANCE = 1;
+int FULL = (int)((360/WHEEL_CIR)*(PI*14.25) * TOLERANCE);
+int QUARTER = FULL / 4;
+int HALF = FULL / 2;
+int THREE_QUARTER = FULL / 1.5;
 
 int DRIVEBASE_POWER = 127;
 int CLAW_POWER = 127;
@@ -28,6 +30,8 @@ bool runFinger = false;
 bool fingerNeedsToOpen = false;
 
 enum WheelDirection wheelDir = FORWARD;
+bool dLeftDirection = false;
+bool dRightDirection = false;
 bool runWheels = false;
 bool leftDone = false;
 bool rightDone = false;
@@ -76,9 +80,7 @@ task fingerMonitor(){
                         if(fingerNeedsToOpen == false || (vexRT[Btn5D] == 1 && inAutonomous == false)){
                                 runFinger = false;
                         }
-                        EndTimeSlice();
-                }
-                EndTimeSlice();
+              }
         }
 }
 
@@ -87,24 +89,30 @@ task wheelMonitor(){
                 while(runWheels){
                         if(abs(SensorValue(leftQuad)) < wheelTargetTicks){
                                 switch(wheelDir){
-                                        case FORWARD: dLeft(false); break;
-                                        case BACKWARD: dLeft(true); break;
-                                        case LEFT: dLeft(true); break;
-                                        case RIGHT: dLeft(false); break;
+                                        case FORWARD: dLeftDirection = false; break;
+                                        case BACKWARD: dLeftDirection = true; break;
+                                        case LEFT: dLeftDirection = true; break;
+                                        case RIGHT: dLeftDirection = false; break;
                                 }
+                                dLeft(dLeftDirection);
                         }else{
+                        				dLeft(!dLeftDirection);
+                        				wait1Msec(25);
                                 leftDone = true;
                                 stopLeft();
                         }
 
                         if(abs(SensorValue(rightQuad)) < wheelTargetTicks){
                                 switch(wheelDir){
-                                        case FORWARD: dRight(false); break;
-                                        case BACKWARD: dRight(true); break;
-                                        case LEFT: dRight(false); break;
-                                        case RIGHT: dRight(true); break;
+                                        case FORWARD: dRightDirection = false; break;
+                                        case BACKWARD: dRightDirection = true; break;
+                                        case LEFT: dRightDirection = false; break;
+                                        case RIGHT: dRightDirection = true; break;
                                 }
+                                dRight(dRightDirection);
                         }else{
+                        				dRight(!dRightDirection);
+                        				wait1Msec(25);
                                 rightDone = true;
                                 stopRight();
                         }
@@ -113,7 +121,6 @@ task wheelMonitor(){
                                 runWheels = false;
                 }
 								stopDrive();
-								EndTimeSlice();
         }
 }
 
@@ -129,7 +136,6 @@ task liftMonitor(){
                 runLift = false;
             }
         }
-        EndTimeSlice();
     }
 }
 
@@ -295,3 +301,4 @@ int clamp(int var, int min, int max){
                 return var;
         }
 }
+#endif

@@ -44,9 +44,9 @@ void pre_auton()
 			displayLCDString(0,0,"Select Program: ");
 			displayLCDNumber(1,0,programSelected(SEGMENTS));
 		}
-		autonSelection = programSelected(8);
+		autonSelection = programSelected(SEGMENTS);
 		}else{
-		autonSelection = programSelected(8);
+		autonSelection = programSelected(SEGMENTS);
 	}
 }
 
@@ -157,6 +157,5 @@ task usercontrol()
 		if(vexRT[Btn7R] == OFF && vexRT[Btn7L] == OFF){
 			analogDrive();
 		}
-		EndTimeSlice();
 	}
 }
