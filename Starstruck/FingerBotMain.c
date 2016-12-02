@@ -157,5 +157,6 @@ task usercontrol()
 		if(vexRT[Btn7R] == OFF && vexRT[Btn7L] == OFF){
 			analogDrive();
 		}
+		EndTimeSlice();
 	}
 }

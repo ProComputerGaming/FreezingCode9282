@@ -1,38 +1,3 @@
-/*! \file FingerBot.h
-\brief Freezing Code 9282 RobotC Starstruck Library.
-
--	Features:
-	+	Syncronous Autonomous Movements for all major mechanisms
-		+	Base
-		+	Lift
-		+	Claw
-	+	Enumeration for robot base direction
-	+	Autonomous Program Selection based on two potentiometers
-*/
-
-/*! \fn task fingerMonitor()
-\brief Synchronous task that monitors the position of the claw
-
-See openClaw(), [runFinger](@ref runFinger), [fingerNeedsToOpen](@ref fingerNeedsToOpen), [downPressure](@ref downPressure)
-*/
-
-/*! \fn task lightMonitor()
-\brief Synchronous task that monitors the values of 6 infrared light sensors mounted on the robot
-
-See [lightArray[]](@ref lightArray)
-*/
-
-/*! \fn task wheelMonitor()
-\brief Synchronous task that monitors the rotation of the drive base wheels
-
-See setSyncMove(WheelDirection d, int targetTicks), dLeft(bool backwards), dRight(bool backwards), [runWheels](@ref runWheels), [leftDone](@ref leftDone), [rightDone](@ref rightDone)
-*/
-
-/*! \fn task liftMonitor()
-\brief Synchronous task that monitors the rotation of the lift motors
-
-See setSyncLift(int targetTicks), dLift(bool down), [runLift](@ref runLift)
-*/
 
 enum WheelDirection{
         FORWARD,
@@ -40,6 +5,11 @@ enum WheelDirection{
         LEFT,
         RIGHT,
 };
+
+const int QUARTER = 250;
+const int HALF = QUARTER * 2;
+const int THREE_QUARTER = QUARTER * 3;
+const int FULL = QUARTER * 4;
 
 int DRIVEBASE_POWER = 127;
 int CLAW_POWER = 127;
@@ -106,7 +76,9 @@ task fingerMonitor(){
                         if(fingerNeedsToOpen == false || (vexRT[Btn5D] == 1 && inAutonomous == false)){
                                 runFinger = false;
                         }
+                        EndTimeSlice();
                 }
+                EndTimeSlice();
         }
 }
 
@@ -115,18 +87,10 @@ task wheelMonitor(){
                 while(runWheels){
                         if(abs(SensorValue(leftQuad)) < wheelTargetTicks){
                                 switch(wheelDir){
-                                        case FORWARD:
-                                        	dLeft(false);
-                                        	break;
-                                        case BACKWARD:
-                                        	dLeft(true);
-                                        	break;
-                                        case LEFT:
-                                        	dLeft(true);
-                                        	break;
-                                        case RIGHT:
-                                        	dLeft(false);
-                                        	break;
+                                        case FORWARD: dLeft(false); break;
+                                        case BACKWARD: dLeft(true); break;
+                                        case LEFT: dLeft(true); break;
+                                        case RIGHT: dLeft(false); break;
                                 }
                         }else{
                                 leftDone = true;
@@ -149,6 +113,7 @@ task wheelMonitor(){
                                 runWheels = false;
                 }
 								stopDrive();
+								EndTimeSlice();
         }
 }
 
@@ -164,6 +129,7 @@ task liftMonitor(){
                 runLift = false;
             }
         }
+        EndTimeSlice();
     }
 }
 

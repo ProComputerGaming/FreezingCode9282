@@ -1,12 +1,11 @@
 void autonZero(){
 				//NEW SYNCHRONOUS CODE
-        setSyncMove(FORWARD, 350);
+        setSyncMove(FORWARD, 325);
         waitForTasks();
         openClaw();
         waitForTasks();
-
         DRIVEBASE_POWER = 63;
-        setSyncMove(LEFT, 250);
+        setSyncMove(LEFT, QUARTER);
         waitForTasks();
         DRIVEBASE_POWER = 127;
         setSyncMove(FORWARD, 475);
@@ -15,32 +14,34 @@ void autonZero(){
         closeClaw(750);
         setSyncLift(650);
         waitForTasks();
+        setSyncMove(FORWARD, 200);
+        waitForTasks();
+        wait1Msec(500);
         DRIVEBASE_POWER = 63;
-        setSyncMove(RIGHT, 250);
+        setSyncMove(RIGHT, QUARTER);
         waitForTasks();
         DRIVEBASE_POWER = 127;
         setSyncMove(FORWARD, 900);
         waitForTasks();
         openClaw();
         waitForTasks();
-        setSyncMove(BACKWARD, 500);
+        setSyncMove(BACKWARD, 700);
         waitForTasks();
+        wait1Msec(750);
         DRIVEBASE_POWER = 63;
-        setSyncMove(LEFT, 250);
-        waitForTasks();
-        setSyncMove(LEFT, 250);
+        setSyncMove(RIGHT, HALF);
         setSyncLift(25);
         waitForTasks();
         DRIVEBASE_POWER = 127;
-        setSyncMove(FORWARD, 500);
+        setSyncMove(FORWARD, 300);
         waitForTasks();
         closeClaw(800);
         waitForTasks();
         setSyncMove(BACKWARD, 200);
         waitForTasks();
         setSyncLift(600);
-        DRIVEBASE_POWER = 63;
-        setSyncMove(RIGHT, 500);
+        DRIVEBASE_POWER = 90;
+        setSyncMove(LEFT, HALF + 20);
         waitForTasks();
         DRIVEBASE_POWER = 127;
         setSyncLift(650);
@@ -48,7 +49,7 @@ void autonZero(){
         waitForTasks();
         openClaw();
         waitForTasks();
-        setSyncLift(700);
+        setSyncLift(725);
         waitForTasks();
         setSyncMove(BACKWARD, 400);
         waitForTasks();
@@ -95,6 +96,7 @@ void autonOne(){
         setSyncLift(700);
         waitForTasks();
         setSyncMove(BACKWARD, 400);
+        setSyncLift(650);
         waitForTasks();
 }
 
