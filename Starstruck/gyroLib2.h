@@ -116,13 +116,13 @@ task GyroTask()
     SensorType[theGyro.port] = sensorNone;
 
     // Wait 1/2 sec
-    wait1Msec(500);
+    wait1Msec(1000);
 
     // Gyro should be motionless here
     SensorType[theGyro.port] = sensorGyro;
 
     // Wait 1/2 sec
-    wait1Msec(500);
+    wait1Msec(1500);
 
     // Save the current system timer
     nSysTimeOffset = nSysTime;
@@ -187,6 +187,7 @@ GyroInit( tSensors port = in1  )
     theGyro.valid = false;
     theGyro.angle = 0.0;
     theGyro.abs_angle = 0.0;
+		SensorScale[theGyro.port] = 100;
 
     startTask( GyroTask );
 }

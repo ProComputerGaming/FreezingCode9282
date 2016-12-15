@@ -43,28 +43,37 @@ task autonomous()
 
 task usercontrol()
 {
-	int scale =102;
+	int scale = 102;
   while (true)
   {
-  	writeDebugStreamLine("GYRO ANGLE: %f\nGYRO SCALE: %d", SensorValue(in1), scale);
-  	wait1Msec(5);
+  	writeDebugStreamLine("Gyro Lib Angle: %f\n", GyroAngleDegGet());
+  	writeDebugStreamLine("Gyro Raw Angle: %f\n", SensorValue[in1]);
+  	wait1Msec(50);
   	clearDebugStream();
+
   	if(vexRT[Btn8U]){
-  		SensorType[in1] = sensorNone;
-  		SensorType[in1] = sensorGyro;
-  		SensorFullCount[in1] = 3600;
-  		SensorScale[in1] = scale;
-  		writeDebugStream("Reinitializing Gyro.... Wait 1 second...\n");
-  		wait1Msec(1000);
+  		GyroReinit();
   	}
 
-  	if(vexRT[Btn7U]){
-  			scale += 1;
-  			wait1Msec(250);
-  	}
-  	if(vexRT[Btn7D]){
-  			scale -= 1;
-  			wait1Msec(250);
-  	}
+  	//writeDebugStreamLine("GYRO ANGLE: %f\nGYRO SCALE: %d", SensorValue(in1), scale);
+  	//wait1Msec(5);
+  	//clearDebugStream();
+  	//if(vexRT[Btn8U]){
+  	//	SensorType[in1] = sensorNone;
+  	//	SensorType[in1] = sensorGyro;
+  	//	SensorFullCount[in1] = 3600;
+  	//	SensorScale[in1] = scale;
+  	//	writeDebugStream("Reinitializing Gyro.... Wait 1 second...\n");
+  	//	wait1Msec(1000);
+  	//}
+
+  	//if(vexRT[Btn7U]){
+  	//		scale += 1;
+  	//		wait1Msec(250);
+  	//}
+  	//if(vexRT[Btn7D]){
+  	//		scale -= 1;
+  	//		wait1Msec(250);
+  	//}
   }
 }
