@@ -56,6 +56,7 @@ task autonomous()
 	startTask(fingerMonitor);
 	startTask(wheelMonitor);
 	startTask(liftMonitor);
+	startTask(motorSlewTask);
 
 	#if(LIGHT_SENSE_EN)
 		startTask(lightMonitor);
@@ -123,6 +124,7 @@ task usercontrol()
 	stopTask(wheelMonitor);
 	stopTask(liftMonitor);
 	startTask(fingerMonitor);
+	startTask(motorSlewTask);
 
 	#if(LIGHT_SENSE_EN)
 		startTask(lightMonitor);

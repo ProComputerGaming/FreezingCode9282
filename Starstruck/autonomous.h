@@ -4,10 +4,8 @@ void autonZero(){
         waitForTasks();
         openClaw();
         waitForTasks();
-        DRIVEBASE_POWER = 127;
         setSyncMove(LEFT, QUARTER);
         waitForTasks();
-        DRIVEBASE_POWER = 127;
         setSyncMove(FORWARD, 475);
         waitForTasks();
         wait1Msec(200);
@@ -18,7 +16,6 @@ void autonZero(){
         setSyncMove(FORWARD, 350);
         waitForTasks();
         wait1Msec(300);
-        DRIVEBASE_POWER = 127;
         setSyncMove(RIGHT, QUARTER);
         waitForTasks();
         wait1Msec(500);
@@ -31,11 +28,9 @@ void autonZero(){
         setSyncMove(BACKWARD, 700);
         waitForTasks();
         wait1Msec(750);
-        DRIVEBASE_POWER = 127;
         setSyncMove(RIGHT, HALF);
         setSyncLift(25);
         waitForTasks();
-        DRIVEBASE_POWER = 127;
         setSyncMove(FORWARD, 400);
         waitForTasks();
         closeClaw(800);
@@ -43,10 +38,8 @@ void autonZero(){
         setSyncMove(BACKWARD, 200);
         waitForTasks();
         setSyncLift(600);
-        DRIVEBASE_POWER = 127;
         setSyncMove(LEFT, HALF);
         waitForTasks();
-        DRIVEBASE_POWER = 127;
         setSyncLift(650);
         setSyncMove(FORWARD, 750);
         waitForTasks();
@@ -59,30 +52,26 @@ void autonZero(){
 }
 
 void autonOne(){
+				//MOTOR_DEFAULT_SLEW_RATE = MOTOR_FAST_SLEW_RATE;
         //NEW SYNCHRONOUS CODE
         setSyncMove(FORWARD, 400);
         waitForTasks();
         openClaw();
         waitForTasks();
-        DRIVEBASE_POWER = 127;
         setSyncMove(RIGHT, QUARTER);
         waitForTasks();
-        DRIVEBASE_POWER = 127;
         setSyncMove(FORWARD, 475);
         waitForTasks();
         wait1Msec(200);
         closeClaw(750);
         setSyncLift(650);
         waitForTasks();
-        DRIVEBASE_POWER = 63;
         setSyncMove(FORWARD, 350);
         waitForTasks();
         wait1Msec(300);
-        DRIVEBASE_POWER = 127;
         setSyncMove(LEFT, QUARTER);
         waitForTasks();
         wait1Msec(500);
-        DRIVEBASE_POWER = 127;
         setSyncMove(FORWARD, 900);
         setSyncLift(675);
         waitForTasks();
@@ -103,10 +92,8 @@ void autonOne(){
         setSyncMove(BACKWARD, 200);
         waitForTasks();
         setSyncLift(600);
-        DRIVEBASE_POWER = 127;
         setSyncMove(RIGHT, HALF);
         waitForTasks();
-        DRIVEBASE_POWER = 127;
         setSyncLift(650);
         setSyncMove(FORWARD, 750);
         waitForTasks();
@@ -119,7 +106,10 @@ void autonOne(){
 }
 
 void autonTwo(){
-
+		openClaw();
+		waitForTasks();
+		setSyncMove(FORWARD, 300);
+		waitForTasks();
 }
 
 void autonThree(){
