@@ -212,14 +212,14 @@ task lightMonitor(){
 }
 
 void analogDrive(){
-	if(vexRT[Ch2] >MOTOR_DEADBAND){
+	//if(vexRT[Ch2] >MOTOR_DEADBAND){
         motorReq[backRight] = vexRT[Ch2];
         motorReq[frontRight] = vexRT[Ch2];
-      }
-     if(vexRT[Ch3] > MOTOR_DEADBAND){
+      //}
+     //if(vexRT[Ch3] > MOTOR_DEADBAND){
         motorReq[backLeft] = vexRT[Ch3];
         motorReq[frontLeft] = vexRT[Ch3];
-      }
+      //}
 }
 
 void waitForTasks(){
