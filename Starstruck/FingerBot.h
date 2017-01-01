@@ -4,7 +4,7 @@
 const int MOTOR_NUM = kNumbOfTotalMotors;
 const int MOTOR_MAX_VALUE = 127;
 const int MOTOR_MIN_VALUE = -127;
-const int MOTOR_DEFAULT_SLEW_RATE = 10;      // Default value of 10 will cause 375mS from full fwd to rev
+const int MOTOR_DEFAULT_SLEW_RATE = 7;      // Default value of 10 will cause 375mS from full fwd to rev
 																							//15 will cause 254 mS from full fwd to rev
 const int MOTOR_FAST_SLEW_RATE = 256;   // essentially off
 const int MOTOR_TASK_DELAY = 15;      // task 1/frequency in mS (about 66Hz)
@@ -200,15 +200,7 @@ task motorSlewTask()
 }
 
 task lightMonitor(){
-        while(true){
-                lightArray[0] = SensorValue(leftFrontLight);
-                lightArray[1] = SensorValue(leftMidLight);
-                lightArray[2] = SensorValue(leftBackLight);
-                lightArray[3] = SensorValue(rightFrontLight);
-                lightArray[4] = SensorValue(rightMidLight);
-                lightArray[5] = SensorValue(rightBackLight);
-                wait1Msec(2);
-        }
+
 }
 
 void analogDrive(){
@@ -254,8 +246,9 @@ void setSyncLift(int targetTicks){
 }
 
 void dLift(bool down){
-        motorReq[leftLiftY] = down ? -LIFT_POWER : LIFT_POWER;
-        motorReq[rightLiftY] = down ? -LIFT_POWER : LIFT_POWER;
+	motorReq[upperLift] = down ? -LIFT_POWER : LIFT_POWER;
+  motorReq[lowerRightLift] = down ? -LIFT_POWER : LIFT_POWER;
+  motorReq[lowerLeftLift] = down ? -LIFT_POWER : LIFT_POWER;
 }
 
 void strafeLeft(int millis){
@@ -330,8 +323,9 @@ void stopDrive(){
 }
 
 void stopLift(){
-        motorReq[leftLiftY] = 0;
-        motorReq[rightLiftY] = 0;
+        	motorReq[upperLift] = 0;
+  motorReq[lowerRightLift] = 0;
+  motorReq[lowerLeftLift] = 0;
 }
 
 void stopAllMotors(){
