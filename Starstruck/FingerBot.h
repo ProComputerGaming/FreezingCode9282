@@ -51,11 +51,8 @@ bool rightDone = false;
 
 bool runLift = false;
 
-int lightArray[6];
-
 task fingerMonitor();
 task liftMonitor();
-task lightMonitor();
 task wheelMonitor();
 task motorSlewTask();
 void analogDrive();
@@ -132,19 +129,59 @@ task wheelMonitor(){
         }
 }
 
+void setSyncMove(WheelDirection d, int targetTicks){
+        wheelTargetTicks = targetTicks;
+        wheelDir = d;
+        leftDone = false;
+        rightDone = false;
+        zeroDriveSensors();
+        runWheels = true;
+
+}
+
+void dLeft(bool backwards){
+        motorReq[backLeft] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motorReq[frontLeft] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+}
+
+void dRight(bool backwards){
+        motorReq[backRight] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motorReq[frontRight] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+}
+
 task liftMonitor(){
     while(true){
         while(runLift){
-            if(abs(SensorValue(liftQuad)) < liftTargetTicks){
-                dLift(false);
-            }else if(abs(SensorValue(liftQuad)) > liftTargetTicks){
-                dLift(true);
-            }else{
-                stopLift();
-                runLift = false;
-            }
+        		bool needsToLower = (abs(SensorValue(liftQuad)) > liftTargetTicks) ? true : false;
+        		switch(needsToLower){
+        			case true:
+        				while(abs(SensorValue(liftQuad)) > liftTargetTicks){
+        					dLift(needsToLower);
+        				}
+        				stopLift();
+        				runLift = false;
+        				break;
+        			case false:
+        				while(abs(SensorValue(liftQuad)) < liftTargetTicks){
+        					dLift(needsToLower);
+        				}
+        				stopLift();
+        				runLift = false;
+        				break;
+        		}
         }
     }
+}
+
+void setSyncLift(int targetTicks){
+        liftTargetTicks = targetTicks;
+        runLift = true;
+}
+
+void dLift(bool down){
+	motorReq[upperLift] = down ? -LIFT_POWER : LIFT_POWER;
+  motorReq[lowerRightLift] = down ? -LIFT_POWER : LIFT_POWER;
+  motorReq[lowerLeftLift] = down ? -LIFT_POWER : LIFT_POWER;
 }
 
 task motorSlewTask()
@@ -199,10 +236,6 @@ task motorSlewTask()
         }
 }
 
-task lightMonitor(){
-
-}
-
 void analogDrive(){
 	//if(vexRT[Ch2] >MOTOR_DEADBAND){
         motorReq[backRight] = vexRT[Ch2];
@@ -218,37 +251,6 @@ void waitForTasks(){
     while(runFinger == true || runWheels == true || runLift == true){
 
     }
-}
-
-void setSyncMove(WheelDirection d, int targetTicks){
-        wheelTargetTicks = targetTicks;
-        wheelDir = d;
-        leftDone = false;
-        rightDone = false;
-        zeroDriveSensors();
-        runWheels = true;
-
-}
-
-void dLeft(bool backwards){
-        motorReq[backLeft] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
-        motorReq[frontLeft] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
-}
-
-void dRight(bool backwards){
-        motorReq[backRight] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
-        motorReq[frontRight] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
-}
-
-void setSyncLift(int targetTicks){
-        liftTargetTicks = targetTicks;
-        runLift = true;
-}
-
-void dLift(bool down){
-	motorReq[upperLift] = down ? -LIFT_POWER : LIFT_POWER;
-  motorReq[lowerRightLift] = down ? -LIFT_POWER : LIFT_POWER;
-  motorReq[lowerLeftLift] = down ? -LIFT_POWER : LIFT_POWER;
 }
 
 void strafeLeft(int millis){
@@ -311,6 +313,8 @@ void stopLeft(){
   if(inAutonomous){
 		motor[backLeft] = 0;
     motor[frontLeft] = 0;
+    motorReq[backLeft] = 0;
+    motorReq[frontLeft] = 0;
 	}else{
 		motorReq[backLeft] = 0;
     motorReq[frontLeft] = 0;
@@ -321,6 +325,8 @@ void stopRight(){
 	if(inAutonomous){
 		motor[backRight] = 0;
     motor[frontRight] = 0;
+    motorReq[backRight] = 0;
+    motorReq[frontRight] = 0;
 	}else{
 		motorReq[backRight] = 0;
     motorReq[frontRight] = 0;
@@ -333,6 +339,9 @@ void stopDrive(){
 }
 
 void stopLift(){
+	motorReq[upperLift] = 0;
+  motorReq[lowerRightLift] = 0;
+  motorReq[lowerLeftLift] = 0;
   motor[upperLift] = 0;
   motor[lowerRightLift] = 0;
   motor[lowerLeftLift] = 0;

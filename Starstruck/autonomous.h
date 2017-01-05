@@ -37,9 +37,9 @@ void autonOne(){
         setSyncMove(RIGHT, QUARTER);
         waitForTasks();
         setSyncMove(FORWARD, 400);
+        setSyncLift(625);
         waitForTasks();
         openClaw();
-        wait1Msec(15000);
 }
 
 void autonTwo(){
