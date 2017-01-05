@@ -117,7 +117,6 @@ task autonomous()
 
 task usercontrol()
 {
-	writeDebugStreamLine("liftPot Value: %d", SensorValue(in6));
 	inAutonomous = false;
 	stopTask(wheelMonitor);
 	stopTask(liftMonitor);
@@ -129,18 +128,14 @@ task usercontrol()
 		displayLCDString(0,0,"Running Program: ");
 		displayLCDNumber(1,0,programSelected(SEGMENTS));
 
-		if(!(SensorValue(in6) < 1350)){
-			if(vexRT[Btn6U] == 1){
-				dLift(false);
-			}
-		}
+		bool liftTooHigh = SensorValue(in6) < 825;
+		bool liftTooLow = SensorValue(in6) > 3000;
 
-		if(!(SensorValue(in6) > 2600)){
-			if(vexRT[Btn6D] == 1){
+		if(vexRT[Btn6U] == 1 && !liftTooHigh){
+					dLift(false);
+		}else if(vexRT[Btn6D] == 1 && !liftTooLow){
 					dLift(true);
-			}
-		}
-		if(vexRT[Btn6U] == OFF && vexRT[Btn6D] == OFF){
+		}else{
 			stopLift();
 		}
 

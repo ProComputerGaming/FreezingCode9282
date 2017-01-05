@@ -18,7 +18,7 @@ enum WheelDirection{
         RIGHT,
 };
 float WHEEL_CIR=PI * 4;
-float TOLERANCE = 1;
+float TOLERANCE = .75;
 int FULL = (int)((360/WHEEL_CIR)*(PI*14.25) * TOLERANCE);
 int QUARTER = FULL / 4;
 int HALF = FULL / 2;
@@ -26,7 +26,7 @@ int THREE_QUARTER = FULL / 1.5;
 
 int motorSlew[MOTOR_NUM];
 int motorReq[MOTOR_NUM];
-int DRIVEBASE_POWER = 127;
+int DRIVEBASE_POWER = 63;
 int CLAW_POWER = 127;
 int LIFT_POWER = 127;
 const int OFF = 0;
@@ -308,13 +308,23 @@ void openClaw(){
 }
 
 void stopLeft(){
-        motorReq[backLeft] = 0;
-        motorReq[frontLeft] = 0;
+  if(inAutonomous){
+		motor[backLeft] = 0;
+    motor[frontLeft] = 0;
+	}else{
+		motorReq[backLeft] = 0;
+    motorReq[frontLeft] = 0;
+  }
 }
 
 void stopRight(){
-        motorReq[backRight] = 0;
-        motorReq[frontRight] = 0;
+	if(inAutonomous){
+		motor[backRight] = 0;
+    motor[frontRight] = 0;
+	}else{
+		motorReq[backRight] = 0;
+    motorReq[frontRight] = 0;
+  }
 }
 
 void stopDrive(){
@@ -323,9 +333,9 @@ void stopDrive(){
 }
 
 void stopLift(){
-        	motorReq[upperLift] = 0;
-  motorReq[lowerRightLift] = 0;
-  motorReq[lowerLeftLift] = 0;
+  motor[upperLift] = 0;
+  motor[lowerRightLift] = 0;
+  motor[lowerLeftLift] = 0;
 }
 
 void stopAllMotors(){
