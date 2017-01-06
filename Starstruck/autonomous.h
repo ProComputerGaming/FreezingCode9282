@@ -1,5 +1,5 @@
 void autonZero(){
-				//NEW SYNCHRONOUS CODE
+//Left Square
         setSyncMove(FORWARD, 400);
         waitForTasks();
         setSyncMove(RIGHT, QUARTER);
@@ -21,7 +21,50 @@ void autonZero(){
 }
 
 void autonOne(){
-				//NEW SYNCHRONOUS CODE
+	//Left Square with Stars
+        setSyncMove(FORWARD, 425);
+        waitForTasks();
+        setSyncMove(RIGHT, QUARTER);
+        waitForTasks();
+        openClaw();
+        waitForTasks();
+        setSyncMove(FORWARD, 425);
+        waitForTasks();
+        closeClaw(750);
+        setSyncLift(625);
+        waitForTasks();
+        setSyncMove(LEFT, QUARTER - 15);
+        waitForTasks();
+        setSyncMove(FORWARD, 400);
+        setSyncLift(625);
+        waitForTasks();
+        openClaw();
+        waitForTasks();
+        setSyncMove(BACKWARD, 300);
+        waitForTasks();
+        setSyncMove(RIGHT, HALF + 50);
+        waitForTasks();
+        setSyncMove(BACKWARD, 75);
+        setSyncLift(50);
+        waitForTasks();
+        setSyncMove(FORWARD, 350);
+        waitForTasks();
+        closeClaw(750);
+        setSyncMove(BACKWARD, 100);
+        waitForTasks();
+        setSyncLift(625);
+        waitForTasks();
+        setSyncMove(LEFT, HALF + 100);
+        waitForTasks();
+        setSyncMove(FORWARD, 350);
+        waitForTasks();
+        openClaw();
+        waitForTasks();
+
+}
+
+void autonTwo(){
+	//Right square
         setSyncMove(FORWARD, 400);
         waitForTasks();
         setSyncMove(LEFT, QUARTER);
@@ -42,15 +85,46 @@ void autonOne(){
         openClaw();
 }
 
-void autonTwo(){
-		openClaw();
-		waitForTasks();
-		setSyncMove(FORWARD, 300);
-		waitForTasks();
-}
-
 void autonThree(){
-
+	//Right Square with Stars
+        setSyncMove(FORWARD, 425);
+        waitForTasks();
+        setSyncMove(LEFT, QUARTER);
+        waitForTasks();
+        openClaw();
+        waitForTasks();
+        setSyncMove(FORWARD, 425);
+        waitForTasks();
+        closeClaw(750);
+        setSyncLift(625);
+        waitForTasks();
+        setSyncMove(RIGHT, QUARTER - 15);
+        waitForTasks();
+        setSyncMove(FORWARD, 400);
+        setSyncLift(625);
+        waitForTasks();
+        openClaw();
+        waitForTasks();
+        setSyncMove(BACKWARD, 300);
+        waitForTasks();
+        setSyncMove(LEFT, HALF + 50);
+        waitForTasks();
+        setSyncMove(BACKWARD, 75);
+        setSyncLift(50);
+        waitForTasks();
+        setSyncMove(FORWARD, 350);
+        waitForTasks();
+        closeClaw(750);
+        setSyncMove(BACKWARD, 100);
+        waitForTasks();
+        setSyncLift(625);
+        waitForTasks();
+        setSyncMove(RIGHT, HALF + 100);
+        waitForTasks();
+        setSyncMove(FORWARD, 350);
+        waitForTasks();
+        openClaw();
+        waitForTasks();
 }
 
 void autonFour(){

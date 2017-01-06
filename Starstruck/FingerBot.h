@@ -18,7 +18,7 @@ enum WheelDirection{
         RIGHT,
 };
 float WHEEL_CIR=PI * 4;
-float TOLERANCE = .75;
+float TOLERANCE = .80;
 int FULL = (int)((360/WHEEL_CIR)*(PI*14.25) * TOLERANCE);
 int QUARTER = FULL / 4;
 int HALF = FULL / 2;

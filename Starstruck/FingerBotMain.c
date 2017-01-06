@@ -26,24 +26,27 @@
 
 #include "Vex_Competition_Includes.c"
 #include "FingerBot.h"
+
+
+
 #include "autonomous.h"
 
 void pre_auton()
 {
 	bStopTasksBetweenModes = true;
 	bLCDBacklight = true;
-	if( !(nVexRCReceiveState & 0x08)){
-		while(!nLCDButtons){
-			wait1Msec(5);
-			clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0,"Select Program: ");
-			displayLCDNumber(1,0,programSelected(SEGMENTS));
-		}
-		autonSelection = programSelected(SEGMENTS);
-		}else{
-		autonSelection = programSelected(SEGMENTS);
-	}
+	//if( !(nVexRCReceiveState & 0x08)){
+	//	while(!nLCDButtons){
+	//		wait1Msec(5);
+	//		clearLCDLine(0);
+	//		clearLCDLine(1);
+	//		displayLCDString(0,0,"Select Program: ");
+	//		displayLCDNumber(1,0,programSelected(SEGMENTS));
+	//	}
+	//	autonSelection = programSelected(SEGMENTS);
+	//	}else{
+	autonSelection = programSelected(SEGMENTS);
+	//}
 }
 
 task autonomous()
@@ -127,6 +130,7 @@ task usercontrol()
 	{
 		displayLCDString(0,0,"Running Program: ");
 		displayLCDNumber(1,0,programSelected(SEGMENTS));
+		autonSelection = programSelected(SEGMENTS);
 
 		bool liftTooHigh = SensorValue(in6) < 825;
 		bool liftTooLow = SensorValue(in6) > 3000;
