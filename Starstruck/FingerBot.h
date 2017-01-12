@@ -4,7 +4,7 @@
 const int MOTOR_NUM = kNumbOfTotalMotors;
 const int MOTOR_MAX_VALUE = 127;
 const int MOTOR_MIN_VALUE = -127;
-const int MOTOR_DEFAULT_SLEW_RATE = 7;      // Default value of 10 will cause 375mS from full fwd to rev
+int MOTOR_DEFAULT_SLEW_RATE = 15;      // Default value of 10 will cause 375mS from full fwd to rev
 																							//15 will cause 254 mS from full fwd to rev
 const int MOTOR_FAST_SLEW_RATE = 256;   // essentially off
 const int MOTOR_TASK_DELAY = 15;      // task 1/frequency in mS (about 66Hz)
@@ -18,7 +18,7 @@ enum WheelDirection{
         RIGHT,
 };
 float WHEEL_CIR=PI * 4;
-float TOLERANCE = .80;
+float TOLERANCE = .8;
 int FULL = (int)((360/WHEEL_CIR)*(PI*14.25) * TOLERANCE);
 int QUARTER = FULL / 4;
 int HALF = FULL / 2;
@@ -58,8 +58,8 @@ task motorSlewTask();
 void analogDrive();
 void waitForTasks();
 void setSyncMove(WheelDirection d,int targetTicks);
-void dLeft(bool backwards);
-void dRight(bool backwards);
+void dLeft(bool backwards, bool bypassSlew);
+void dRight(bool backwards, bool bypassSlew);
 void setSyncLift(int targetTicks);
 void dLift(bool down);
 void strafeRight(int millis);
@@ -105,8 +105,10 @@ task wheelMonitor(){
                                         case LEFT: dLeftDirection = true; break;
                                         case RIGHT: dLeftDirection = false; break;
                                 }
-                                dLeft(dLeftDirection);
+                                dLeft(dLeftDirection, false);
                         }else{
+                        	//dLeft(!dLeftDirection, false);
+                        	//wait1Msec(100);
                         	leftDone = true;
                         	stopLeft();
                       	}
@@ -117,8 +119,10 @@ task wheelMonitor(){
                                         case LEFT: dRightDirection = false; break;
                                         case RIGHT: dRightDirection = true; break;
                                 }
-                                dRight(dRightDirection);
+                                dRight(dRightDirection, false);
                         }else{
+                        	//dRight(!dRightDirection, false);
+                        	//wait1Msec(100);
                         	rightDone = true;
                         	stopRight();
                       	}
@@ -139,14 +143,28 @@ void setSyncMove(WheelDirection d, int targetTicks){
 
 }
 
-void dLeft(bool backwards){
+void dLeft(bool backwards, bool bypassSlew){
+	if(bypassSlew){
+        motor[backLeft] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motor[frontLeft] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
         motorReq[backLeft] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
         motorReq[frontLeft] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+      }else{
+        motorReq[backLeft] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motorReq[frontLeft] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+    }
 }
 
-void dRight(bool backwards){
+void dRight(bool backwards, bool bypassSlew){
+			if(bypassSlew){
+				motor[backRight] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motor[frontRight] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+				motorReq[backRight] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motorReq[frontRight] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+			}else{
         motorReq[backRight] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
         motorReq[frontRight] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+      }
 }
 
 task liftMonitor(){

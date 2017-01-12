@@ -22,9 +22,9 @@ void autonZero(){
 
 void autonOne(){
 	//Left Square with Stars
-        setSyncMove(FORWARD, 425);
+        setSyncMove(FORWARD, 450);
         waitForTasks();
-        setSyncMove(RIGHT, QUARTER);
+        setSyncMove(RIGHT, QUARTER - 50);
         waitForTasks();
         openClaw();
         waitForTasks();
@@ -33,7 +33,7 @@ void autonOne(){
         closeClaw(750);
         setSyncLift(625);
         waitForTasks();
-        setSyncMove(LEFT, QUARTER - 15);
+        setSyncMove(LEFT, QUARTER - 75);
         waitForTasks();
         setSyncMove(FORWARD, 400);
         setSyncLift(625);
@@ -42,7 +42,7 @@ void autonOne(){
         waitForTasks();
         setSyncMove(BACKWARD, 300);
         waitForTasks();
-        setSyncMove(RIGHT, HALF + 50);
+        setSyncMove(RIGHT, HALF - 100);
         waitForTasks();
         setSyncMove(BACKWARD, 75);
         setSyncLift(50);
@@ -54,7 +54,7 @@ void autonOne(){
         waitForTasks();
         setSyncLift(625);
         waitForTasks();
-        setSyncMove(LEFT, HALF + 100);
+        setSyncMove(LEFT, HALF);
         waitForTasks();
         setSyncMove(FORWARD, 350);
         waitForTasks();
@@ -167,58 +167,94 @@ void autonThirteen(){
 
 }
 
-//Robot Skills
 void autonFourteen(){
-				////First Cube Drop
-				//driveForward(200);
-    //    openClaw();
-    //    wait1Msec(300);
-    //    driveForward(550);
-    //    closeClaw(1000);
-    //    raiseLift(650);
-    //    turnLeft(250);
-    //    driveForward(900);
-    //    openClaw();
+	setSyncMove(FORWARD, 100);
+	waitForTasks();
+	openClaw();
+	waitForTasks();
+	wait1Msec(200);
+	setSyncLift(650);
+	waitForTasks();
+	setSyncMove(BACKWARD, 100);
+	waitForTasks();
+	wait1Msec(1500);
+	closeClaw(750);
+	wait1Msec(1500);
+	setSyncMove(FORWARD, 950);
+	waitForTasks();
+	openClaw(); //Drop 3 star and cube combo
+	waitForTasks();
 
-    //    //Extra 2 StarS
-    //    wait1Msec(200);
-    //    driveBackward(500);
-    //    turnLeft(1200);
-    //    lowerLift(25);
-    //    driveForward(300);
-    //    closeClaw(400);
-    //    driveBackward(200);
-    //    raiseLift(650);
-    //    turnRight(1250);
-    //    driveForward(550);
-    //    openClaw();
+	setSyncMove(BACKWARD, 950);
+	waitForTasks();
+	wait1Msec(1000);
+	closeClaw(750);
+	wait1Msec(1000);
+	setSyncMove(FORWARD, 950);
+	waitForTasks();
+	openClaw();
+	waitForTasks(); //Drop the one cube preload
 
-    //    //Skills Cube 1
-    //    //driveBackward(100);
-    //    turnLeft(875);
-    //    lowerLift(25);
-    //    driveForward(650);
-    //    wait1Msec(500);
-    //    closeClaw(750);
-    //    driveBackward(100);
-    //    raiseLift(675);
-    //    turnRight(800);
-    //    driveForward(650);
-    //		openClaw();
+	setSyncMove(BACKWARD, 475);
+	waitForTasks();
+	setSyncMove(RIGHT, QUARTER);
+	waitForTasks();
+	setSyncLift(25);
+	waitForTasks();
+	setSyncMove(FORWARD, 350);
+	waitForTasks();
+	closeClaw(400);
+	setSyncLift(625);
+	waitForTasks();
+	setSyncMove(FORWARD, 100);
+	waitForTasks();
+	wait1Msec(400);
+	setSyncMove(LEFT, QUARTER);
+	waitForTasks();
+	setSyncMove(FORWARD, 475);
+	waitForTasks();
+	openClaw(); //Drop field cube
 
-    //		//Skills Cube 2
-    //		//driveBackward(100);
-    //		turnLeft(1000);
-    //    lowerLift(25);
-    //    driveForward(700);
-    //    wait1Msec(500);
-    //    closeClaw(750);
-    //    driveBackward(100);
-    //    raiseLift(675);
-    //    turnRight(1000);
-    //    driveForward(700);
-    //		openClaw();
-    //		driveBackward(300);
+	waitForTasks();
+	setSyncMove(BACKWARD, 275);
+	waitForTasks();
+	wait1Msec(400);
+	setSyncMove(RIGHT, HALF + 50);
+	waitForTasks();
+	setSyncMove(BACKWARD, 100);
+	waitForTasks();
+	setSyncLift(25);
+	waitForTasks();
+	DRIVEBASE_POWER = 127;
+	setSyncMove(FORWARD, 350);
+	waitForTasks();
+	closeClaw(750);
+	setSyncMove(BACKWARD, 275);
+	waitForTasks();
+	setSyncLift(625);
+	waitForTasks();
+	DRIVEBASE_POWER = 63;
+	setSyncMove(LEFT, HALF + 50);
+	waitForTasks();
+	wait1Msec(400);
+	setSyncMove(FORWARD, 350);
+	waitForTasks();
+	openClaw(); //Drop field stars
 
-    		//NEW SYNCHRONOUS CODE
+	waitForTasks();
+	setSyncMove(BACKWARD, 400);
+	waitForTasks();
+	setSyncLift(50);
+	waitForTasks();
+	setSyncMove(FORWARD, 400);
+	waitForTasks();
+	closeClaw(750);
+	setSyncMove(BACKWARD, 400);
+	waitForTasks();
+	setSyncLift(625);
+	waitForTasks();
+	setSyncMove(FORWARD, 500);
+	waitForTasks();
+	openClaw();
+	waitForTasks();
 }

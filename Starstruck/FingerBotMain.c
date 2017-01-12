@@ -22,8 +22,6 @@
 
 #pragma competitionControl(Competition)
 
-#define LIGHT_SENSE_EN 0
-
 #include "Vex_Competition_Includes.c"
 #include "FingerBot.h"
 
@@ -53,14 +51,11 @@ task autonomous()
 {
 
 	inAutonomous = true;
+	MOTOR_DEFAULT_SLEW_RATE = 10;
 	startTask(fingerMonitor);
 	startTask(wheelMonitor);
 	startTask(liftMonitor);
 	startTask(motorSlewTask);
-
-	#if(LIGHT_SENSE_EN)
-		startTask(lightMonitor);
-	#endif
 
 	zeroAllSensors();
 	switch(autonSelection){
@@ -121,6 +116,7 @@ task autonomous()
 task usercontrol()
 {
 	inAutonomous = false;
+	MOTOR_DEFAULT_SLEW_RATE = 15;
 	stopTask(wheelMonitor);
 	stopTask(liftMonitor);
 	startTask(fingerMonitor);
